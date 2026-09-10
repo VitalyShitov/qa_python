@@ -1,14 +1,6 @@
 import pytest
 
 
-from main import BooksCollector
-
-
-@pytest.fixture
-def collector():
-    return BooksCollector()
-
-
 class TestBooksCollector:
 
 
@@ -78,12 +70,20 @@ class TestBooksCollector:
         assert ("Книга" in collector.get_books_for_children()) == expected
 
 
-    def test_add_and_delete_book_in_favorites(self, collector):
+    def test_add_book_in_favorites_success(self, collector):
         collector.add_new_book("Избранное")
         collector.add_book_in_favorites("Избранное")
-        assert collector.get_list_of_favorites_books() == ["Избранное"]
+        favorites = collector.get_list_of_favorites_books()
+        assert favorites == ["Избранное"]
+
+
+    def test_delete_book_from_favorites_success(self, collector):
+        collector.add_new_book("Избранное")
+        collector.add_book_in_favorites("Избранное")
+        assert "Избранное" in collector.get_list_of_favorites_books()
         collector.delete_book_from_favorites("Избранное")
-        assert collector.get_list_of_favorites_books() == []
+        favorites = collector.get_list_of_favorites_books()
+        assert favorites == []
 
 
     def test_add_book_in_favorites_duplicate_and_missing_book(self, collector):
